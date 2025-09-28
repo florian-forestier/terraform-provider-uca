@@ -10,7 +10,7 @@ import (
 
 func main() {
 	opts := providerserver.ServeOpts{
-		Address: "cloud.edu.forestier.re",
+		Address: "registry.terraform.io/florian-forestier/uca",
 	}
 	err := providerserver.Serve(context.Background(), provider.New(), opts)
 	if err != nil {
