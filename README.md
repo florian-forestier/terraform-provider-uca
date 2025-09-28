@@ -9,7 +9,7 @@ terraform {
   required_providers {
     uca = {
       source = "registry.terraform.io/florian-forestier/uca"
-      version = "1.1.0"
+      version = "1.0.0"
     }
   }
 }
