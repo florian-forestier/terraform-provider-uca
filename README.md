@@ -9,7 +9,7 @@ terraform {
   required_providers {
     uca = {
       source = "registry.terraform.io/florian-forestier/uca"
-      version = "1.0.0"
+      version = "1.0.1"
     }
   }
 }
@@ -21,7 +21,7 @@ terraform {
 
 ```tf
 provider "uca" {
-  endpoint = "http://localhost:8000/"
+  endpoint = "https://cloud-ui.edu.forestier.re/api/"
   user_token = "YOUR_API_KEY_HERE"
 }
 ```
