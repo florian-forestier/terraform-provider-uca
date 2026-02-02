@@ -1,5 +1,5 @@
 #!/bin/bash
-export VERSION="1.0.0"
+export VERSION="1.0.2"
 
 mkdir build
 
@@ -44,6 +44,8 @@ zip build/terraform-provider-uca_${VERSION}_windows_arm.zip terraform-provider-u
 
 GOOS=windows GOARCH=arm64 go build -o terraform-provider-uca_v$VERSION .
 zip build/terraform-provider-uca_${VERSION}_windows_arm64.zip terraform-provider-uca_v$VERSION
+
+rm terraform-provider-uca_v$VERSION
 
 cd build
 echo "$(sha256sum *)" > terraform-provider-uca_${VERSION}_SHA256SUMS

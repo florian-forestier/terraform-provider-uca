@@ -23,12 +23,11 @@ type ServerResource struct {
 }
 
 type ServerModel struct {
-	Id             tftypes.String `tfsdk:"id"`
-	Name           tftypes.String `tfsdk:"name"`
-	IPv4           tftypes.String `tfsdk:"ipv4"`
-	SSHKey         tftypes.String `tfsdk:"ssh_key"`
-	Username       tftypes.String `tfsdk:"username"`
-	ExpirationDate tftypes.String `tfsdk:"expiration_date"`
+	Id       tftypes.String `tfsdk:"id"`
+	Name     tftypes.String `tfsdk:"name"`
+	IPv4     tftypes.String `tfsdk:"ipv4"`
+	SSHKey   tftypes.String `tfsdk:"ssh_key"`
+	Username tftypes.String `tfsdk:"username"`
 }
 
 func NewServerResource() tfresource.Resource {
@@ -65,11 +64,6 @@ func (r *ServerResource) Schema(ctx context.Context, req tfresource.SchemaReques
 			},
 			"ipv4": tfschema.StringAttribute{
 				MarkdownDescription: "The server's IPv4",
-				Required:            false,
-				Computed:            true,
-			},
-			"expiration_date": tfschema.StringAttribute{
-				MarkdownDescription: "The expiration date",
 				Required:            false,
 				Computed:            true,
 			},
@@ -143,7 +137,6 @@ func (r *ServerResource) Create(ctx context.Context, req tfresource.CreateReques
 	state.Username = tftypes.StringValue(data2["user"])
 	state.IPv4 = tftypes.StringValue(data2["ipv4"])
 	state.SSHKey = tftypes.StringValue(data2["ssh_key"])
-	state.ExpirationDate = tftypes.StringValue(data2["expiration_date"])
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &state)...)
 }
@@ -186,7 +179,6 @@ func (r *ServerResource) Read(ctx context.Context, req tfresource.ReadRequest, r
 				state.Username = tftypes.StringValue(k["user"])
 				state.IPv4 = tftypes.StringValue(k["ipv4"])
 				state.SSHKey = tftypes.StringValue(k["ssh_key"])
-				state.ExpirationDate = tftypes.StringValue(k["expiration_date"])
 				resp.Diagnostics.Append(resp.State.Set(ctx, &state)...)
 				break
 			}

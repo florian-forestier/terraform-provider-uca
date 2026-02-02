@@ -47,6 +47,5 @@ The following data is returned as output:
 
 * `id` : the unique id of the generated server (UUIDv4);
 * `ipv4` : the server's IPv4 address ;
-* `expiration_date` : the server's expiration date (can be extented up to 12 hours via UI).
 
 **This resource does not support in-place update. Please destroy and apply again when needed.**
