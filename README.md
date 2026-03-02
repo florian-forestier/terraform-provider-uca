@@ -34,18 +34,3 @@ You can set `UCA_USER_TOKEN` in your environment to avoid typing it down in your
 
 ### Resources
 
-#### `uca_server`
-
-This resource allows you to create a server for 4hrs, extendable up to 12hrs using the UI.
-
-The following arguments are required:
-* `name` : the displayed name of your server. Must comply with RFC 1123 (only alphanums and dashes).
-* `username` : the default username created on your server.
-* `ssh_key` : the public ssh key to use for your default username.
-
-The following data is returned as output:
-
-* `id` : the unique id of the generated server (UUIDv4);
-* `ipv4` : the server's IPv4 address ;
-
-**This resource does not support in-place update. Please destroy and apply again when needed.**

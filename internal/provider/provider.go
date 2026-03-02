@@ -13,6 +13,14 @@ import (
 	tftypes "github.com/hashicorp/terraform-plugin-framework/types"
 )
 
+type HasContext interface {
+	Context() struct {
+		UserToken  string
+		Endpoint   string
+		HttpClient *http.Client
+	}
+}
+
 type ProviderModel struct {
 	UserToken tftypes.String `tfsdk:"user_token"`
 	Endpoint  tftypes.String `tfsdk:"endpoint"`
@@ -33,11 +41,11 @@ func New() func() tfprovider.Provider {
 	}
 }
 
-func (p *Provider) Metadata(ctx context.Context, req tfprovider.MetadataRequest, resp *tfprovider.MetadataResponse) {
+func (p *Provider) Metadata(_ context.Context, _ tfprovider.MetadataRequest, resp *tfprovider.MetadataResponse) {
 	resp.TypeName = "uca"
 }
 
-func (p *Provider) Schema(ctx context.Context, req tfprovider.SchemaRequest, resp *tfprovider.SchemaResponse) {
+func (p *Provider) Schema(_ context.Context, _ tfprovider.SchemaRequest, resp *tfprovider.SchemaResponse) {
 	resp.Schema = tfschema.Schema{
 		Attributes: map[string]tfschema.Attribute{
 			"user_token": tfschema.StringAttribute{
@@ -72,16 +80,19 @@ func (p *Provider) Configure(ctx context.Context, req tfprovider.ConfigureReques
 	resp.ResourceData = p   // will be usable by Resources
 }
 
-func (p *Provider) Resources(ctx context.Context) []func() tfresource.Resource {
+func (p *Provider) Resources(_ context.Context) []func() tfresource.Resource {
 	return []func() tfresource.Resource{
 		NewServerResource,
+		NewSecurityGroupResource,
+		NewSecurityRuleResource,
+		NewSecurityGroupAttachmentResource,
 	}
 }
 
-func (p *Provider) DataSources(ctx context.Context) []func() tfdatasource.DataSource {
+func (p *Provider) DataSources(_ context.Context) []func() tfdatasource.DataSource {
 	return []func() tfdatasource.DataSource{}
 }
 
-func (p *Provider) Functions(ctx context.Context) []func() tffunction.Function {
+func (p *Provider) Functions(_ context.Context) []func() tffunction.Function {
 	return []func() tffunction.Function{}
 }
