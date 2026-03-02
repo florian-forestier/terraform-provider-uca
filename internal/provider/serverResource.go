@@ -117,7 +117,7 @@ func (r *ServerResource) Create(ctx context.Context, req tfresource.CreateReques
 		Name:     plannedState.Name.ValueString(),
 	}
 
-	res, _, err := MakeHTTPRequest(data, true, r, "POST", "servers", []int{http.StatusCreated})
+	res, _, err := MakeHTTPRequest(data, true, r, "POST", "servers", []int{http.StatusCreated, http.StatusOK})
 
 	if err != nil {
 		resp.Diagnostics.AddError(err.Error(), "")
@@ -187,12 +187,14 @@ func (r *ServerResource) Update(ctx context.Context, req tfresource.UpdateReques
 		Name: plannedState.Name.ValueString(),
 	}
 
-	_, _, err := MakeHTTPRequest(dataToSend, true, r, "PUT", fmt.Sprintf("servers/%s", currentState.Id.ValueString()), []int{http.StatusOK, http.StatusNotFound, http.StatusNoContent})
+	_, _, err := MakeHTTPRequest(dataToSend, true, r, "PUT", fmt.Sprintf("servers/%s", currentState.Id.ValueString()), []int{http.StatusCreated, http.StatusOK, http.StatusNotFound, http.StatusNoContent})
 
 	if err != nil {
 		resp.Diagnostics.AddError(err.Error(), "")
 		return
 	}
+
+	plannedState.Id = currentState.Id
 
 	resp.State.Set(ctx, &plannedState)
 }

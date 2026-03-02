@@ -77,9 +77,10 @@ func (r *SecurityRuleResource) Schema(_ context.Context, _ tfresource.SchemaRequ
 				MarkdownDescription: "Security Rule description",
 				Required:            false,
 				Computed:            false,
+				Optional:            true,
 			},
 			"protocol": tfschema.StringAttribute{
-				MarkdownDescription: "Security Rule protocol (\"tcp\", or \"udp\")",
+				MarkdownDescription: "Security Rule protocol (\"TCP\", or \"UDP\")",
 				Required:            true,
 				Computed:            false,
 			},
@@ -89,17 +90,12 @@ func (r *SecurityRuleResource) Schema(_ context.Context, _ tfresource.SchemaRequ
 				Computed:            false,
 			},
 			"direction": tfschema.StringAttribute{
-				MarkdownDescription: "Security Rule direction (\"ingress\" or \"egress\")",
+				MarkdownDescription: "Security Rule direction (\"inbound\" or \"outbound\")",
 				Required:            true,
 				Computed:            false,
 			},
 			"ip_range": tfschema.StringAttribute{
 				MarkdownDescription: "Security Rule IP Range. Can be an IPv4 or IPv6 CIDR notation (192.168.0.0/16 or bc8:bd04::/64 for example)",
-				Required:            true,
-				Computed:            false,
-			},
-			"action": tfschema.StringAttribute{
-				MarkdownDescription: "Security Rule action (\"allow\" or \"deny\")",
 				Required:            true,
 				Computed:            false,
 			},
@@ -222,5 +218,7 @@ func (r *SecurityRuleResource) Update(ctx context.Context, req tfresource.Update
 		return
 	}
 
-	req.State.Set(ctx, &plannedState)
+	plannedState.Id = currentState.Id
+
+	resp.State.Set(ctx, &plannedState)
 }

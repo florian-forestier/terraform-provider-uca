@@ -28,7 +28,7 @@ func MakeHTTPRequest[T HasContext](payload any, hasOutput bool, ct T, method str
 
 	defer response.Body.Close()
 
-	if slices.Contains(expectedStatuses, response.StatusCode) {
+	if !slices.Contains(expectedStatuses, response.StatusCode) {
 		return nil, 0, fmt.Errorf("unexpected status code: %d", response.StatusCode)
 	}
 

@@ -159,5 +159,7 @@ func (r *SecurityGroupResource) Update(ctx context.Context, req tfresource.Updat
 		return
 	}
 
-	req.State.Set(ctx, &plannedState)
+	plannedState.Id = currentState.Id
+
+	resp.State.Set(ctx, &plannedState)
 }
