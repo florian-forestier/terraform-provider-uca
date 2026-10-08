@@ -48,11 +48,15 @@ func (p *Provider) Metadata(_ context.Context, _ tfprovider.MetadataRequest, res
 }
 
 func (p *Provider) Schema(_ context.Context, _ tfprovider.SchemaRequest, resp *tfprovider.SchemaResponse) {
+	// Only require user_token when UCA_USER_TOKEN is unset, so Terraform still prompts for it.
+	tokenFromEnv := os.Getenv("UCA_USER_TOKEN") != ""
+
 	resp.Schema = tfschema.Schema{
 		Attributes: map[string]tfschema.Attribute{
 			"user_token": tfschema.StringAttribute{
 				MarkdownDescription: "Your auth token. Can also be set with the `UCA_USER_TOKEN` environment variable.",
-				Optional:            true,
+				Required:            !tokenFromEnv,
+				Optional:            tokenFromEnv,
 				Sensitive:           true,
 			},
 			"endpoint": tfschema.StringAttribute{
