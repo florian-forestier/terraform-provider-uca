@@ -68,7 +68,12 @@ func (p *Provider) Configure(ctx context.Context, req tfprovider.ConfigureReques
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	p.userToken = data.UserToken.ValueString()
+        p.userToken = os.Getenv("UCA_USER_TOKEN")
+
+        if p.userToken == "" {
+	     p.userToken = data.UserToken.ValueString()
+        }
+
 	p.endpoint = data.Endpoint.ValueString()
 
 	if !strings.HasSuffix(p.endpoint, "/") {
