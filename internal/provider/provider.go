@@ -3,6 +3,7 @@ package provider
 import (
 	"context"
 	"net/http"
+	"os"
 	"strings"
 
 	tfdatasource "github.com/hashicorp/terraform-plugin-framework/datasource"
@@ -68,11 +69,11 @@ func (p *Provider) Configure(ctx context.Context, req tfprovider.ConfigureReques
 	if resp.Diagnostics.HasError() {
 		return
 	}
-        p.userToken = os.Getenv("UCA_USER_TOKEN")
+	p.userToken = os.Getenv("UCA_USER_TOKEN")
 
-        if p.userToken == "" {
-	     p.userToken = data.UserToken.ValueString()
-        }
+	if p.userToken == "" {
+		p.userToken = data.UserToken.ValueString()
+	}
 
 	p.endpoint = data.Endpoint.ValueString()
 
