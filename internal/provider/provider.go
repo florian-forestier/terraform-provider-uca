@@ -8,6 +8,7 @@ import (
 
 	tfdatasource "github.com/hashicorp/terraform-plugin-framework/datasource"
 	tffunction "github.com/hashicorp/terraform-plugin-framework/function"
+	"github.com/hashicorp/terraform-plugin-framework/path"
 	tfprovider "github.com/hashicorp/terraform-plugin-framework/provider"
 	tfschema "github.com/hashicorp/terraform-plugin-framework/provider/schema"
 	tfresource "github.com/hashicorp/terraform-plugin-framework/resource"
@@ -50,8 +51,8 @@ func (p *Provider) Schema(_ context.Context, _ tfprovider.SchemaRequest, resp *t
 	resp.Schema = tfschema.Schema{
 		Attributes: map[string]tfschema.Attribute{
 			"user_token": tfschema.StringAttribute{
-				MarkdownDescription: "Your auth token",
-				Required:            true,
+				MarkdownDescription: "Your auth token. Can also be set with the `UCA_USER_TOKEN` environment variable.",
+				Optional:            true,
 				Sensitive:           true,
 			},
 			"endpoint": tfschema.StringAttribute{
@@ -69,10 +70,17 @@ func (p *Provider) Configure(ctx context.Context, req tfprovider.ConfigureReques
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	p.userToken = os.Getenv("UCA_USER_TOKEN")
-
+	p.userToken = data.UserToken.ValueString()
 	if p.userToken == "" {
-		p.userToken = data.UserToken.ValueString()
+		p.userToken = os.Getenv("UCA_USER_TOKEN")
+	}
+	if p.userToken == "" {
+		resp.Diagnostics.AddAttributeError(
+			path.Root("user_token"),
+			"Missing user token",
+			"Set user_token in the provider configuration or the UCA_USER_TOKEN environment variable.",
+		)
+		return
 	}
 
 	p.endpoint = data.Endpoint.ValueString()
